@@ -10,6 +10,7 @@ export const command = {
         spawn(process.argv[0], process.argv.slice(1), {
             env: { PROCESS_RESTARTING: 1 },
             stdio: 'ignore'
-        }).unref();        
+        }).unref();
+        process.exit();
     }
 };
