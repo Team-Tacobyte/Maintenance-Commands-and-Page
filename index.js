@@ -1,3 +1,12 @@
+const reload_check = () => {
+    if (process.env.PROCESS_RESTARTING) {
+        delete process.env.PROCESS_RESTARTING;
+        // Give old process one second to shut down before continuing ...
+        setTimeout(reload_check, 1000);
+        return;
+    }
+}
+reload_check();
 // Just a friendly greeting :)
 // And console decoration
 const USER = process.env.USER ? process.env.USER : process.env.USERNAME;
@@ -17,7 +26,7 @@ if (USER) {
 
 // https://github.com/motdotla/dotenv
 // For sensitive data (passwords, usernames, tokens, etc) **NEEDS .env FILE**
-// Set PORT, ACCESS_ROLE_ID_ARRAY, OVERLORD_ID, and D_TOKEN values
+// Set PORT, ACCESS_ROLE_ID_ARRAY, OVERLORD_ID, STATS_CHANNEL, and D_TOKEN values
 import * as dotenv from "dotenv/config";
 
 
@@ -26,3 +35,6 @@ import * as bot from "./discord_bot.js";
 
 // Setup Express server
 import * as server from "./http_server.js";
+
+// Setup server stats
+import * as stats from "./server-stats.js";

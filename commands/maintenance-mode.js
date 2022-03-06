@@ -20,7 +20,6 @@ export const command = {
                     .setCustomId('no')
                     .setLabel('NO')
                     .setStyle('DANGER'),
-                
             )
         interaction.reply({ ephemeral: true, embeds: [embed], components: [buttons]});
 

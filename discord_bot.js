@@ -6,7 +6,8 @@ import { Routes } from "discord-api-types/v9";
 const client = new Client({ intents: [Intents.FLAGS.GUILDS]});
 
 // Built in file-system module
-import { readdirSync } from "fs";
+import { readdirSync, stat } from "fs";
+import { get_stats } from "./server-stats.js";
 
 // Import and setup command variables
 const commands = [];
@@ -21,7 +22,9 @@ client.commands = new Collection();
 
 // Triggered only once when the client is ready
 client.once('ready', async () => {
-
+    let stats_msg = await client.channels.cache.get(process.env.STATS_CHANNEL).send(await get_stats())
+    setInterval(async() => {stats_msg.edit({ content: await get_stats()})}, 5000)
+    console.log('Stats Mechanism Started')
     const CLIENT_ID = client.user.id;
     const rest = new REST({ version: '9' }).setToken(process.env.D_TOKEN);
 
@@ -107,5 +110,11 @@ client.on("guildCreate", guild => {
     })();
 
 })
+
+export const get_commands = async() => {
+    let values = []
+    for (const [key, value] of await client.commands.entries()) {values.push(value)}
+    return values;
+}
 
 client.login(process.env.D_TOKEN);
